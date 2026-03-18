@@ -1,12 +1,11 @@
 import pathlib
 from typing import Optional
 
-import torch
-from faster_whisper import WhisperModel
-from faster_whisper.tokenizer import _LANGUAGE_CODES
 from tqdm import tqdm
 
-SUPPORTED_LANGUAGES = _LANGUAGE_CODES
+from . import utils
+
+SUPPORTED_LANGUAGES = utils.load_language_codes()
 SUPPORTED_MODELS = {
     "tiny",
     "tiny.en",
@@ -30,6 +29,8 @@ CACHE_DIR = pathlib.Path.home() / ".cache" / "huggingface" / "hub"
 
 
 def get_device(cpu: bool) -> tuple[str, str]:
+    import torch
+
     if cpu:
         return "cpu", "int8"
     if torch.cuda.is_available():
@@ -44,7 +45,11 @@ def is_model_cached(model: str) -> bool:
     return (CACHE_DIR / f"models--{repo_name}").exists()
 
 
-def load_model(model: str, cpu: bool) -> WhisperModel:
+def load_model(model: str, cpu: bool):
+    from faster_whisper import WhisperModel
+
+    utils.save_language_codes()
+
     device, compute_type = get_device(cpu)
     if not is_model_cached(model):
         print(
@@ -56,13 +61,15 @@ def load_model(model: str, cpu: bool) -> WhisperModel:
 
 
 def transcribe(
-    model: WhisperModel,
+    model,
     model_name: str,
     file: pathlib.Path,
     language: Optional[str],
     translate: bool = False,
     verbose: bool = False,
 ) -> tuple[list, str]:
+    from faster_whisper import WhisperModel
+
     if verbose:
         print(f"\nTranscribing: {file.name}")
 

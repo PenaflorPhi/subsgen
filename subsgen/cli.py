@@ -1,6 +1,6 @@
 import argparse
 
-from . import transcriber, utils
+from . import utils
 
 
 def display_args(args) -> None:
@@ -17,6 +17,8 @@ def display_args(args) -> None:
 
 
 def parse_args() -> argparse.Namespace:
+    from . import transcriber
+
     config = utils.load_config()
     parser = argparse.ArgumentParser(
         prog="subsgen",

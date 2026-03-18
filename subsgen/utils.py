@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 CONFIG_DIR = pathlib.Path.home() / ".config" / "subsgen"
 CONFIG_FILE = CONFIG_DIR / "config.json"
-
+LANGUAGE_CACHE_FILE = CONFIG_DIR / "language_codes.json"
 
 SUPPORTED_EXTENSIONS = {
     ".mp4",
@@ -103,3 +103,18 @@ def display_models() -> None:
     for model in distil:
         print(f"    {model}")
     print("\nTip: English-only models (e.g. base.en) are faster for English content.")
+
+
+def save_language_codes() -> None:
+    from faster_whisper.tokenizer import _LANGUAGE_CODES
+
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    with open(LANGUAGE_CACHE_FILE, "w") as f:
+        json.dump(list(_LANGUAGE_CODES), f)
+
+
+def load_language_codes() -> set[str]:
+    if not LANGUAGE_CACHE_FILE.exists():
+        save_language_codes()
+    with open(LANGUAGE_CACHE_FILE) as f:
+        return set(json.load(f))
