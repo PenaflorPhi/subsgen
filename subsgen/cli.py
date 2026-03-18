@@ -45,6 +45,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         default="base",
+        metavar="LANG",
         choices=transcriber.SUPPORTED_MODELS,
         help=(
             "Whisper model to use for transcription. Larger models are more accurate but slower. "
