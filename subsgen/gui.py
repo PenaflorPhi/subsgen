@@ -19,6 +19,7 @@ from . import main, transcriber, utils
 
 def launch(args=None):
     root = ttk.Window(themename="darkly")
+    root.title("Subsgen")
     root.geometry("780x560")
     root.minsize(640, 480)
 

@@ -4,7 +4,7 @@ Tool to auto-generate subtitles for video and audio files using Whisper AI, with
 
 ## Screenshot
 
-![subsgen GUI](docs/screenshot.png)
+![subsgen GUI](docs/Subsgen.png)
 
 ## How it works
 
