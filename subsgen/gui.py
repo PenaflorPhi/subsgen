@@ -1,3 +1,5 @@
+import signal
+import threading
 from tkinter import filedialog, messagebox
 
 import ttkbootstrap as ttk
@@ -22,6 +24,14 @@ def launch(args=None):
     root.title("Subsgen")
     root.geometry("780x560")
     root.minsize(640, 480)
+
+    def on_close():
+        root.destroy()
+
+    root.protocol("WM_DELETE_WINDOW", on_close)
+    signal.signal(signal.SIGTERM, lambda *_: on_close())
+    signal.signal(signal.SIGHUP, lambda *_: on_close())
+    signal.signal(signal.SIGTSTP, lambda *_: on_close())
 
     # --- State variables ---
     input_path = ttk.StringVar(value=args.path if args and args.path != "." else "")
@@ -50,6 +60,7 @@ def launch(args=None):
             output_path.set(path)
 
     # --- Run ---
+
     def run():
         if not input_path.get():
             messagebox.showerror("Error", "Input directory is required.")
@@ -73,7 +84,8 @@ def launch(args=None):
         )
         if args.save_config:
             utils.save_config(args)
-        main.run(args)
+
+        threading.Thread(target=main.run, args=(args,), daemon=True).start()
 
     # --- Layout ---
     outer = ttk.Frame(root, padding=24)
