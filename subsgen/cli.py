@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 
 from . import utils
 
@@ -15,7 +16,10 @@ DEFAULTS = {
 
 def display_args(args) -> None:
     print("subsgen")
-    print(f"  Path:       {args.path}")
+    print(f"  Path:       {pathlib.Path(args.path).resolve()}")
+    print(
+        f"  Output:     {pathlib.Path(args.output).resolve() if args.output else pathlib.Path(args.path).resolve()}"
+    )
     print(f"  Format:     {args.file_format or 'all supported'}")
     print(f"  Model:      {args.model}")
     print(f"  Language:   {args.language or 'auto-detect'}")
@@ -41,6 +45,12 @@ def parse_args() -> argparse.Namespace:
         default=".",
         help="Path to a file or directory to process. Defaults to the current directory.",
     )
+    parser.add_argument(
+        "--output",
+        metavar="DIR",
+        help="Directory to write subtitle files to. Defaults to the same directory as the input file.",
+    )
+
     parser.add_argument(
         "--file_format",
         help=(
@@ -97,6 +107,13 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="List all available Whisper models and exit. See also: --model",
     )
+
+    parser.add_argument(
+        "--gui",
+        action="store_true",
+        help="Launch the graphical interface.",
+    )
+
     parser.set_defaults(**config)
     args = parser.parse_args()
 
