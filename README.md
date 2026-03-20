@@ -1,10 +1,14 @@
 # subsgen
 
-CLI tool to auto-generate subtitles for video and audio files using Whisper AI.
+Tool to auto-generate subtitles for video and audio files using Whisper AI, with both a graphical interface and a command-line interface.
+
+## Screenshot
+
+![subsgen GUI](docs/screenshot.png)
 
 ## How it works
 
-subsgen uses [faster-whisper](https://github.com/SYSTRAN/faster-whisper) to transcribe audio and video files and saves the output as `.srt` subtitle files alongside the source files.
+subsgen uses [faster-whisper](https://github.com/SYSTRAN/faster-whisper) to transcribe audio and video files and saves the output as `.srt` subtitle files alongside the source files, or to a specified output directory.
 
 ## Requirements
 
@@ -30,6 +34,12 @@ pip install .
 
 ## Usage
 
+### GUI
+```bash
+subsgen --gui
+```
+
+### CLI
 ```bash
 # Transcribe all media files in the current directory
 subsgen
@@ -37,6 +47,9 @@ subsgen
 # Transcribe a specific file or directory
 subsgen ./videos
 subsgen video.mp4
+
+# Write subtitles to a separate output directory
+subsgen ./videos --output ./subtitles
 
 # Filter by format
 subsgen ./videos --file_format mkv
@@ -70,7 +83,6 @@ subsgen ./videos --model small --language es --save-config
 ## Supported formats
 
 **Video:** mp4, mkv, avi, mov, wmv, flv, webm, m4v
-
 **Audio:** mp3, wav, aac, ogg, flac, m4a, wma
 
 ## Models
@@ -90,11 +102,8 @@ English-only models (e.g. `base.en`) are faster and more accurate for English co
 
 ## Configuration
 
-Running with `--save-config` saves your settings to `~/.config/subsgen/config.json`. These will be used as defaults on subsequent runs and can be overridden by passing arguments explicitly.
-
+Running with `--save-config` saves your settings to `~/.config/subsgen/config.json`. These will be used as defaults on subsequent runs and in the GUI, and can be overridden by passing arguments explicitly.
 
 ## License
 
 MIT
-
-
